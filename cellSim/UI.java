@@ -5,20 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class UI extends JPanel implements ActionListener {
-
     // Create panels for the Model and the View
-    JPanel panel, panel2;
-    JTextField textField, textField2;
-
-    //Buttons
-    // Control Panel buttons
-        JButton playButton = new JButton("PLAY");
-        JButton nextButton = new JButton("NEXT STEP");
-        JButton resetButton = new JButton("RESET");
-        JButton displayButton = new JButton("DISPLAY STATS");
-        // This button is only shown when the the playButton is hidden.
-        JButton pauseButton = new JButton("PAUSE");
-
+    JPanel editPanel, gridPanel;
     //Variables
     int hungerDecayVal = 0; // from 1 to 100
     double foodGeneration = 0; // from 0 to 1
@@ -26,96 +14,163 @@ public class UI extends JPanel implements ActionListener {
     int healthFromFood = 0; // from 1 to 100
     int initialCellsVal = 0; // from 0 to 10
     int initialFoodVal = 0; // form 0 to 10
-
     //TextField Variables
-    JTextField hungerDecayInput = new JTextField("0");
+    JTextField hungerDecayInput = new JTextField("1");
     JTextField foodGenInput = new JTextField("0.5");
     JTextField lifeGenInput = new JTextField("0.5");
     JTextField foodRegenInput = new JTextField("20");
     JTextField initialCellsInput = new JTextField("5");
     JTextField initialFoodInput = new JTextField("3");
-
     //Buttons & TextFields
     JButton submitButton = new JButton("Submit");
+    // Layout
+    GridBagLayout editLayout = new GridBagLayout();
+    GridBagConstraints editLayoutConstraints = new GridBagConstraints();
 
     //constructor
     public UI() {
-        createEditVariables();
-    };
 
-    public void createEditVariables(){
+        JTextField[] descriptionList = createDescriptions();
+
+        super.setLayout(new GridBagLayout());
+
+        GridBagConstraints editPanelLayout = new GridBagConstraints();
+        GridBagConstraints gridPanelLayout = new GridBagConstraints();
+        GridBagConstraints controlPanelLayout = new GridBagConstraints();
+        addLayoutConstraints(editPanelLayout, gridPanelLayout, controlPanelLayout);
+
+        GridBagConstraints description = new GridBagConstraints();
+        GridBagConstraints inputFields = new GridBagConstraints();
+        GridBagConstraints buttonConstraints = new GridBagConstraints();
+        inputFields.gridx = 1;
+        description.gridx = 0;
+
+        createEditPanel(inputFields, editPanelLayout, description, buttonConstraints, descriptionList);
+
+        // Add dropdown menu with Life options to simulate
         String[] lifeString = {"Cell", "Fish", "Human", "Martian", "Orc"};
         JComboBox lifeList = new JComboBox(lifeString);
+        editPanel.add(lifeList, buttonConstraints);
 
-        JTextField hungerDecay = new JTextField("hunger decay per turn (1-100): ");
-        hungerDecay.setEditable(false);
-        JTextField foodGen = new JTextField("food generation per turn (0-1): ");
-        foodGen.setEditable(false);
-        JTextField lifeGen = new JTextField("life generation per turn (0-1): ");
-        lifeGen.setEditable(false);
-        JTextField foodRegen = new JTextField("health per food (0-100): ");
-        foodRegen.setEditable(false);
-        JTextField initialCells = new JTextField("initial cells (0-10): ");
-        initialCells.setEditable(false);
-        JTextField initialFood = new JTextField("initial food (0-10): ");
-        initialFood.setEditable(false);
+        gridPanel = new JPanel(new GridBagLayout());
+        this.add(gridPanel, gridPanelLayout);
+        addGrid(gridPanel);
 
-        JTextField textField2 = new JTextField("0");
-        JTextField textField4 = new JTextField("Grid Placeholder");
-        this.setLayout(new BorderLayout());
-        this.setBackground(Color.ORANGE);
-        this.setSize(300, 300);
-        this.add(textField4, BorderLayout.CENTER);
+        // Control Panel Setup
+        JPanel controlPanel = createControlPanel(controlPanelLayout, buttonConstraints);
 
-        panel = new JPanel();
-        panel2 = new JPanel();
-        this.add(panel, BorderLayout.WEST);
 
-        // Edit Panel
-        panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
-        panel.add(lifeList);
-        panel.add(hungerDecay);
-        panel.add(hungerDecayInput);
-        panel.add(submitButton);/**
-         panel.add(foodGen);
-         panel.add(lifeGen);
-         panel.add(foodRegen);
-         panel.add(initialCells);
-         panel.add(initialFood);
-         **/
+    }
 
-        panel.add(hungerDecayInput);
-        panel.setSize(250, 250);
-        panel.setBackground(Color.LIGHT_GRAY);
+    private JPanel createControlPanel(GridBagConstraints controlPanelLayout, GridBagConstraints buttonConstraints) {
+        JPanel controlPanel = new JPanel(new GridBagLayout());
+        this.add(controlPanel, controlPanelLayout);
+        addButtonsToControlPanel(buttonConstraints, controlPanel);
+        return controlPanel;
 
+    }
+
+    private void createEditPanel(GridBagConstraints inputFields, GridBagConstraints editPanelLayout, GridBagConstraints description, GridBagConstraints buttonConstraints, JTextField[] descriptionList) {
+        editPanel = new JPanel(new GridBagLayout());
+        this.add(editPanel, editPanelLayout);
+        inputFields.gridy = 1;
+        inputFields.gridx = 2;
+        editPanel.add(hungerDecayInput, inputFields);
+        inputFields.gridy = 2;
+        editPanel.add(foodGenInput,inputFields);
+        inputFields.gridy = 3;
+        editPanel.add(lifeGenInput, inputFields);
+        inputFields.gridy = 4;
+        editPanel.add(foodRegenInput, inputFields);
+        inputFields.gridy = 5;
+        editPanel.add(initialCellsInput, inputFields);
+        // Format and add descriptions to editpanel
+        for(int i = 1; i < 6; i++){
+            description.gridy = i;
+            editPanel.add(descriptionList[i-1], description);
+        }
+        buttonConstraints.gridy = 7;
+        editPanel.add(submitButton, buttonConstraints);
+        buttonConstraints.gridy = 0;
         //add event listener to SubmitButton
         buttonProperties();
 
+    }
 
+    public JTextField[] createDescriptions(){
+        JTextField[] descriptionList = new JTextField[6];
+        JTextField hungerDecay = new JTextField("hunger decay per turn (1-100): ");
+        hungerDecay.setEditable(false);
+        descriptionList[0] = hungerDecay;
+        JTextField foodGen = new JTextField("food generation per turn (0-1): ");
+        foodGen.setEditable(false);
+        descriptionList[1] = foodGen;
+        JTextField lifeGen = new JTextField("life generation per turn (0-1): ");
+        lifeGen.setEditable(false);
+        descriptionList[2] = lifeGen;
+        JTextField foodRegen = new JTextField("health per food (0-100): ");
+        foodRegen.setEditable(false);
+        descriptionList[3] = foodRegen;
+        JTextField initialCells = new JTextField("initial cells (0-10): ");
+        initialCells.setEditable(false);
+        descriptionList[4] = initialCells;
+        JTextField initialFood = new JTextField("initial food (0-10): ");
+        initialFood.setEditable(false);
+        descriptionList[5] = initialFood;
+        return descriptionList;
+    }
+
+    public void addLayoutConstraints(GridBagConstraints editPanelLayout, GridBagConstraints gridPanelLayout, GridBagConstraints controlPanelLayout){
+        editPanelLayout.fill = GridBagConstraints.BOTH;
+        editPanelLayout.anchor = GridBagConstraints.WEST;
+        editPanelLayout.weightx = 0.5;
+        editPanelLayout.weighty = 0.5;
+        editPanelLayout.gridy = 0;
+
+
+        gridPanelLayout.fill = GridBagConstraints.HORIZONTAL;
+        gridPanelLayout.anchor = GridBagConstraints.EAST;
+        gridPanelLayout.weightx = 0.5;
+        gridPanelLayout.weighty = 0.5;
+        gridPanelLayout.gridy = 0;
+
+        controlPanelLayout.fill = GridBagConstraints.BOTH;
+        controlPanelLayout.anchor = GridBagConstraints.SOUTH;
+        controlPanelLayout.weightx = 0.5;
+        controlPanelLayout.weighty = 0.25;
+        controlPanelLayout.gridy = 1;
+        controlPanelLayout.gridwidth = 2;
+    }
+
+    public void addGrid(JPanel gridPanel){
+        JTextField textField4 = new JTextField("Grid Placeholder");
+        gridPanel.add(textField4);
+
+    }
+
+    public void addButtonsToControlPanel(GridBagConstraints buttonConstraints, JPanel controlPanel){
+        //Buttons
+        // Control Panel buttons
+        JButton playButton = new JButton("PLAY");
+        JButton nextButton = new JButton("NEXT STEP");
+        JButton resetButton = new JButton("RESET");
+        JButton displayButton = new JButton("DISPLAY STATS");
+        // This button is only shown when the the playButton is hidden.
+        JButton pauseButton = new JButton("PAUSE");
 
 
 
         //Bottom Panel (Control Panel?)
-        this.add(panel2, BorderLayout.SOUTH); //Adds the panel and sets panel location
-        panel2.setBackground(Color.PINK);
-        addButtonsToControlPanel(panel2);
-        panel2.setSize(250, 250);
-        /**
-         * panel2.add(getGrid);
-         *
-         */
-
+        controlPanel.setBackground(Color.PINK);
+        buttonConstraints.gridy = 0;
+        controlPanel.add(playButton, buttonConstraints);
+        buttonConstraints.gridy = 1;
+        controlPanel.add(nextButton);
+        buttonConstraints.gridy = 2;
+        controlPanel.add(resetButton);
+        buttonConstraints.gridy = 3;
+        controlPanel.add(displayButton);
     }
-
-
-    public void addButtonsToControlPanel(JPanel panel){
-        panel.add(playButton);
-        panel.add(nextButton);
-        panel.add(resetButton);
-        panel.add(displayButton);
-    }
-
-
 
 
     /**
@@ -177,7 +232,7 @@ public class UI extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        panel.setBackground(Color.BLUE); //filler
+        editPanel.setBackground(Color.BLUE); //filler
         inputValidation();
         getVariables();
         System.out.println("hungerDecayVal = " + hungerDecayVal);
