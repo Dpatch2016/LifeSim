@@ -1,4 +1,4 @@
-package cellSim;
+package Jframe;
 
 
 import java.awt.*;
