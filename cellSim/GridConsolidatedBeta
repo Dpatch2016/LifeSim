@@ -8,7 +8,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-public class GridConsolidated extends JInternalFrame{
+public class GridConsolidatedBeta extends JInternalFrame{
 
 
 
@@ -21,7 +21,7 @@ public class GridConsolidated extends JInternalFrame{
 
 
 
-    public GridConsolidated(int k) {
+    public GridConsolidatedBeta(int k) {
 
         JPanel controlPanel = new JPanel(new GridLayout(10,10));
 
