@@ -1,14 +1,10 @@
-package Jframe;
-
+package cellSim;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.Rectangle2D;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-public class GridConsolidatedBeta extends JInternalFrame{
+public class GridConsolidated extends JInternalFrame{
 
 
 
@@ -21,27 +17,27 @@ public class GridConsolidatedBeta extends JInternalFrame{
 
 
 
-    public GridConsolidatedBeta(int k) {
+    public GridConsolidated(int k) {
 
         JPanel controlPanel = new JPanel(new GridLayout(10,10));
 
         if (k==1){
-        for (int i=0; i <10; i++){
-            for(int j = 0; j<10;j++){
-                JTextArea item = new JTextArea("");
-                if(i==8 && j==9){
-                    item.setText("5");
-                    item.setBackground(new Color(255,192,203));
+            for (int i=0; i <10; i++){
+                for(int j = 0; j<10;j++){
+                    JTextArea item = new JTextArea("");
+                    if(i==8 && j==9){
+                        item.setText("5");
+                        item.setBackground(new Color(255,192,203));
+                    }
+                    else{
+                        item.setBackground(new Color(100,255,255));
+                    }
+                    Border border = BorderFactory.createLineBorder(Color.BLACK);
+                    item.setBorder(BorderFactory.createCompoundBorder(border,
+                            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+                    controlPanel.add(item);
                 }
-                else{
-                    item.setBackground(new Color(0,255,255));
-                }
-                Border border = BorderFactory.createLineBorder(Color.BLACK);
-                item.setBorder(BorderFactory.createCompoundBorder(border,
-                        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-                controlPanel.add(item);
-            }
-        }}
+            }}
         else if (k == 2){
             for (int i=0; i <10; i++){
                 for(int j = 0; j<10;j++){
@@ -52,7 +48,7 @@ public class GridConsolidatedBeta extends JInternalFrame{
                         item.setBackground(new Color(255,192,203));
                     }
                     else{
-                        item.setBackground(new Color(0,255,255));
+                        item.setBackground(new Color(100,255,255));
                     }
                     Border border = BorderFactory.createLineBorder(Color.BLACK);
                     item.setBorder(BorderFactory.createCompoundBorder(border,
@@ -71,7 +67,7 @@ public class GridConsolidatedBeta extends JInternalFrame{
                         item.setBackground(new Color(255,192,203));
                     }
                     else{
-                        item.setBackground(new Color(0,255,255));
+                        item.setBackground(new Color(100,255,255));
                     }
                     Border border = BorderFactory.createLineBorder(Color.BLACK);
                     item.setBorder(BorderFactory.createCompoundBorder(border,
@@ -90,7 +86,7 @@ public class GridConsolidatedBeta extends JInternalFrame{
                         item.setBackground(new Color(255,192,203));
                     }
                     else{
-                        item.setBackground(new Color(0,255,255));
+                        item.setBackground(new Color(100,255,255));
                     }
                     Border border = BorderFactory.createLineBorder(Color.BLACK);
                     item.setBorder(BorderFactory.createCompoundBorder(border,
@@ -108,15 +104,6 @@ public class GridConsolidatedBeta extends JInternalFrame{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-//    public void paint(Graphics g){
-//        super.paintComponents(g);
-//        for (int i=0; i < rows+1; i++){
-//            g.drawLine(originX, originY + i * cellSide, originX + cols * cellSide, originY + i * cellSide);
-//        }
-//        for (int i=0; i < cols+1; i++){
-//            g.drawLine(originX + i * cellSide, originY, originX + i * cellSide, originY + rows * cellSide);
-//        }
-//    }
 
     public static void main(String[] args) throws InterruptedException {
 

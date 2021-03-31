@@ -47,7 +47,7 @@ public class Cell {
         }
         else{
             Random rand = new Random();
-            setFood(rand.nextInt(Main.RANGE), rand.nextInt(Main.RANGE));
+            setFood(rand.nextInt(CellSimulator.RANGE), rand.nextInt(CellSimulator.RANGE));
             System.out.println("---WANDERING AIMLESSLY---");
         }
     }
@@ -83,7 +83,7 @@ public class Cell {
         int yDistance = this.getY() - this.getyFood();
 
         //System.out.println("My coords are " + self.x + ", " + self.y + ". And my nearest food is " + self.xfood +", " + self.yfood);
-        Main.findFromCoord(grid, this.getX(), this.getY()).removeCell();
+        CellSimulator.findFromCoord(grid, this.getX(), this.getY()).removeCell();
         if (Math.abs(yDistance) > Math.abs(xDistance)){
             if(yDistance < 0)
                 this.y++;
@@ -96,7 +96,7 @@ public class Cell {
             else
                 this.x--;
         }
-        if(Main.findFromCoord(grid, this.getX(), this.getY()).hasCell){
+        if(CellSimulator.findFromCoord(grid, this.getX(), this.getY()).hasCell){
             this.x +=  (int)(Math.random() * (1 - -1 + 1) + -1);
             this.y +=  (int)(Math.random() * (1 - -1 + 1) + -1);
         }
@@ -105,14 +105,14 @@ public class Cell {
         //
         if (this.getX() < 0)
             this.x = 0;
-        else if (this.getX() > Main.RANGE)
-            this.x = Main.RANGE;
+        else if (this.getX() > CellSimulator.RANGE)
+            this.x = CellSimulator.RANGE;
         if (this.getY() < 0)
             this.y = 0;
-        else if (this.getY() > Main.RANGE)
-            this.y = Main.RANGE;
+        else if (this.getY() > CellSimulator.RANGE)
+            this.y = CellSimulator.RANGE;
 
-        Main.findFromCoord(grid, this.getX(),this.getY()).addCell();
+        CellSimulator.findFromCoord(grid, this.getX(),this.getY()).addCell();
         xDistance = this.getX() - this.getxFood();
         yDistance = this.getY() - this.getyFood();
 
@@ -128,7 +128,7 @@ public class Cell {
         this.hunger += 5;
             if (this.hunger > 100)
                 this.hunger = 100;
-        Main.findFromCoord(grid, this.getX(),this.getY()).removeFood();
+        CellSimulator.findFromCoord(grid, this.getX(),this.getY()).removeFood();
     }
 
     public void starve(){

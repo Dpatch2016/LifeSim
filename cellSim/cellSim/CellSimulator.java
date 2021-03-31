@@ -4,7 +4,7 @@ package cellSim;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Main {
+public class CellSimulator {
     static int RANGE = 10;
     static double FOODRATE = 0.5;
     static double CELLRATE = 0.05;
