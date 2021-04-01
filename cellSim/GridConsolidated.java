@@ -25,15 +25,16 @@ public class GridConsolidated extends JInternalFrame{
         for(Grids item:gridList){
             JTextArea box = new JTextArea("");
             if(item.hasCell){
-                box.setBackground(Color.green);
+                box.setBackground(new Color(155, 237, 187));
             }
             else if(item.hasFood){
-                box.setBackground(Color.red);
+
+                box.setBackground(new Color(	231, 224, 211));
             }
             else{
-                box.setBackground(Color.white);
+                box.setBackground(new Color(	226, 238, 241));
             }
-            Border border = BorderFactory.createLineBorder(Color.BLACK);
+            Border border = BorderFactory.createLineBorder(Color.white);
             box.setBorder(BorderFactory.createCompoundBorder(border,
                     BorderFactory.createEmptyBorder(5, 5, 5, 5)));
             controlPanel.add(box);
