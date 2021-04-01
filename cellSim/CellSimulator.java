@@ -1,6 +1,7 @@
 package cellSim;
 
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,6 +9,50 @@ public class CellSimulator {
     static int RANGE = 10;
     static double FOODRATE = 0.5;
     static double CELLRATE = 0.05;
+
+    int hungerDecayVal;
+    double foodGeneration;
+    double lifeGeneration;
+    int healthFromFood;
+    int initialCellsVal;
+    int initialFoodVal;
+
+    ArrayList<Grids> grid;
+    ArrayList<Cell> cell;
+
+
+    public CellSimulator(int hungerDecayVal, double foodGeneration, double lifeGeneration,
+                                             int healthFromFood, int initialCellsVal, int initialFoodVal){
+        this.hungerDecayVal = hungerDecayVal;
+        this.foodGeneration = foodGeneration;
+        this.lifeGeneration = lifeGeneration;
+        this.healthFromFood = healthFromFood;
+        this.initialCellsVal = initialCellsVal;
+        this.initialFoodVal = initialFoodVal;
+
+        this.grid = new ArrayList<>();
+        this.cell = new ArrayList<>();
+
+        for(int i=0;i<RANGE;i++){
+            for(int j = 0; j<RANGE; j++){
+                this.grid.add(new Grids(j,i));
+            }
+        }
+
+        for (int i = 0; i<initialCellsVal; i++){
+            cell.add(makeNewCell(this.grid));
+        }
+
+        for (int i = 0; i<initialFoodVal; i++){
+            makeNewFood(this.grid);
+        }
+
+
+    }
+
+    public ArrayList<Grids> returnGrids(){
+        return this.grid;
+    }
 
     public static Grids findFromCoord(ArrayList<Grids> grid, int x, int y){
         for (Grids item: grid){
@@ -58,53 +103,56 @@ public class CellSimulator {
         System.out.println("\n");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        CellSimulator cellSim = new CellSimulator(0,0.5,0.05,0,1, 4);
+        JFrame frame = new JFrame();
+        JInternalFrame gridDisplay=new GridConsolidated(cellSim.returnGrids());
 
-        ArrayList<Grids> grid = new ArrayList<>();
-        ArrayList<Cell> cell = new ArrayList<>();
+        frame.setSize(500,500);
+        frame.setVisible(true);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 
-
-        for(int i=0;i<RANGE;i++){
-            for(int j = 0; j<RANGE; j++){
-                grid.add(new Grids(j,i));
-            }
-        }
-
-        for (int i = 0; i<1; i++){
-            cell.add(makeNewCell(grid));
-        }
-
-        for (int i = 0; i<4; i++){
-            makeNewFood(grid);
-        }
-
-        for (int i = 0; i<20; i++){
+        for (int i = 0; i<1000; i++){
+            int numberOfAlive = 0;
             try {
-                for (Cell item : cell) {
+                for (Cell item : cellSim.cell) {
                     if (item.isAlive()) {
-                        item.navigate(grid);
-                        printOut(grid);
+                        numberOfAlive++;
+                        item.navigate(cellSim.grid);
+
                     } else {
-                        findFromCoord(grid, item.getX(), item.getY()).removeCell();
-                        cell.remove(item);
+
+                        findFromCoord(cellSim.grid, item.getX(), item.getY()).removeCell();
+                        //cellSim.cell.remove(item);
                     }
 
                 }
-                if(Math.random() <= CELLRATE){
-                    cell.add(makeNewCell(grid));
+                System.out.println("Alive Cells are: "+ numberOfAlive);
+                if(Math.random() <= cellSim.lifeGeneration){
+                    cellSim.cell.add(makeNewCell(cellSim.grid));
                     System.out.println("NEW CELL MADE");
                 }
-                if(Math.random() <= FOODRATE){
-                    makeNewFood(grid);
+                if(Math.random() <= cellSim.foodGeneration){
+                    makeNewFood(cellSim.grid);
                     System.out.println("");
                 }
+                try{
+                    frame.remove(gridDisplay);
+                }
+                catch(Exception e){
+
+                }
+                gridDisplay = new GridConsolidated(cellSim.returnGrids());
+                frame.add(gridDisplay);
+                //printOut(cellSim.grid);
             }catch(IndexOutOfBoundsException e){
-                System.out.println("NO CELLS LEFT ALIVE");
-                System.exit(0);
+                System.out.println("NO CELLS LEFT ALIVE" + e);
+                //System.exit(0);
             }
 
 
-
+        Thread.sleep(500);
         }
 
 
