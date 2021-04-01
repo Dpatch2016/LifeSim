@@ -3,6 +3,8 @@ package cellSim;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Iterator;
 import java.util.Random;
 
 public class CellSimulator {
@@ -62,23 +64,23 @@ public class CellSimulator {
                 }
             }
         }
-        return grid.get(RANGE*RANGE);
+        return grid.get(RANGE*RANGE-1);
     }
 
     public static void makeNewFood(ArrayList<Grids> grid){
         Random rand = new Random();
-        int numb = rand.nextInt(RANGE*RANGE);
+        int numb = rand.nextInt(RANGE*RANGE-1);
         while(grid.get(numb).getFood() || grid.get(numb).getCell()){
-            numb = rand.nextInt(RANGE*RANGE);
+            numb = rand.nextInt(RANGE*RANGE-1);
         }
         grid.get(numb).addFood();
     }
 
     public static Cell makeNewCell(ArrayList<Grids> grid){
         Random rand = new Random();
-        int numb = rand.nextInt(RANGE*RANGE);
+        int numb = rand.nextInt(RANGE*RANGE-1);
         while(grid.get(numb).getFood() || grid.get(numb).getCell()){
-            numb = rand.nextInt(RANGE*RANGE);
+            numb = rand.nextInt(RANGE*RANGE-1);
         }
         grid.get(numb).addCell();
         return new Cell(grid.get(numb).getX(),grid.get(numb).getY());
@@ -115,19 +117,23 @@ public class CellSimulator {
 
         for (int i = 0; i<1000; i++){
             int numberOfAlive = 0;
+            int intarr[] = {};
+
             try {
-                for (Cell item : cellSim.cell) {
+                Iterator<Cell> itr = cellSim.cell.iterator();
+                while (itr.hasNext()) {
+                    Cell item = itr.next();
                     if (item.isAlive()) {
                         numberOfAlive++;
                         item.navigate(cellSim.grid);
 
                     } else {
-
                         findFromCoord(cellSim.grid, item.getX(), item.getY()).removeCell();
-                        //cellSim.cell.remove(item);
+                        itr.remove();
                     }
 
                 }
+
                 System.out.println("Alive Cells are: "+ numberOfAlive);
                 if(Math.random() <= cellSim.lifeGeneration){
                     cellSim.cell.add(makeNewCell(cellSim.grid));
@@ -146,15 +152,15 @@ public class CellSimulator {
                 gridDisplay = new GridConsolidated(cellSim.returnGrids());
                 frame.add(gridDisplay);
                 //printOut(cellSim.grid);
-            }catch(IndexOutOfBoundsException e){
+            }catch(InputMismatchException e){
                 System.out.println("NO CELLS LEFT ALIVE" + e);
                 //System.exit(0);
             }
 
 
-        Thread.sleep(500);
+        Thread.sleep(400);
         }
-
+        System.out.println("DONE!!");
 
     }
 }
