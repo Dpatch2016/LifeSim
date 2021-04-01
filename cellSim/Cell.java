@@ -136,6 +136,7 @@ public class Cell {
             if (this.hunger < 0){
                 this.hunger = 0;
                 this.alive = false;
+                System.out.println("A CELL DIED");
             }
     }
 
