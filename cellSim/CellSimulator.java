@@ -152,7 +152,7 @@ public class CellSimulator {
                 gridDisplay = new GridConsolidated(cellSim.returnGrids());
                 frame.add(gridDisplay);
                 //printOut(cellSim.grid);
-            }catch(InputMismatchException e){
+            }catch(Exception e){
                 System.out.println("NO CELLS LEFT ALIVE" + e);
                 //System.exit(0);
             }
