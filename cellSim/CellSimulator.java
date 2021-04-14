@@ -19,8 +19,11 @@ public class CellSimulator {
     int initialCellsVal;
     int initialFoodVal;
 
+
     ArrayList<Grids> grid;
     ArrayList<Cell> cell;
+
+
 
 
     public CellSimulator(int hungerDecayVal, double foodGeneration, double lifeGeneration,
@@ -53,6 +56,29 @@ public class CellSimulator {
     }
 
     public ArrayList<Grids> returnGrids(){
+        return this.grid;
+    }
+
+    public ArrayList<Grids> returnNext() {
+        Iterator<Cell> itr = this.cell.iterator();
+        while (itr.hasNext()) {
+            Cell item = itr.next();
+            if (item.isAlive()) {
+                item.navigate(this.grid);
+
+            } else {
+                findFromCoord(this.grid, item.getX(), item.getY()).removeCell();
+                itr.remove();
+            }
+
+            if (Math.random() <= this.lifeGeneration) {
+                this.cell.add(makeNewCell(this.grid));
+            }
+            if (Math.random() <= this.foodGeneration) {
+                makeNewFood(this.grid);
+            }
+
+        }
         return this.grid;
     }
 
@@ -106,7 +132,7 @@ public class CellSimulator {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        CellSimulator cellSim = new CellSimulator(0,0.5,0.05,0,1, 4);
+        CellSimulator cellSim = new CellSimulator(0,0.5,0.10,0,1, 4);
         JFrame frame = new JFrame();
         JInternalFrame gridDisplay=new GridConsolidated(cellSim.returnGrids());
 
@@ -115,34 +141,12 @@ public class CellSimulator {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 
-        for (int i = 0; i<1000; i++){
+        for (int i = 0; i<10000000; i++){
             int numberOfAlive = 0;
-            int intarr[] = {};
+
 
             try {
-                Iterator<Cell> itr = cellSim.cell.iterator();
-                while (itr.hasNext()) {
-                    Cell item = itr.next();
-                    if (item.isAlive()) {
-                        numberOfAlive++;
-                        item.navigate(cellSim.grid);
-
-                    } else {
-                        findFromCoord(cellSim.grid, item.getX(), item.getY()).removeCell();
-                        itr.remove();
-                    }
-
-                }
-
-                System.out.println("Alive Cells are: "+ numberOfAlive);
-                if(Math.random() <= cellSim.lifeGeneration){
-                    cellSim.cell.add(makeNewCell(cellSim.grid));
-                    System.out.println("NEW CELL MADE");
-                }
-                if(Math.random() <= cellSim.foodGeneration){
-                    makeNewFood(cellSim.grid);
-                    System.out.println("");
-                }
+                cellSim.returnNext();
                 try{
                     frame.remove(gridDisplay);
                 }
@@ -158,7 +162,7 @@ public class CellSimulator {
             }
 
 
-        Thread.sleep(400);
+            Thread.sleep(500);
         }
         System.out.println("DONE!!");
 
