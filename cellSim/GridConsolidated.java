@@ -25,10 +25,11 @@ public class GridConsolidated extends JInternalFrame{
         for(Grids item:gridList){
             JTextArea box = new JTextArea("");
             if(item.hasCell){
+                box.setText("Cell");
                 box.setBackground(new Color(155, 247, 187));
             }
             else if(item.hasFood){
-
+                box.setText("Food");
                 box.setBackground(new Color(	231, 224, 211));
             }
             else{
