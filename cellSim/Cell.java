@@ -12,14 +12,18 @@ public class Cell {
     int y;
     int xFood;
     int yFood;
+    int hungerDecay;
+    int healthPerFood;
 
-    public Cell(int x, int y){
+    public Cell(int x, int y, int hungerDecay, int healthPerFood){
         this.alive = true;
         this.hunger = 100;
         this.x = x;
         this.y = y;
         this.xFood = x;
         this.yFood = y;
+        this.hungerDecay = hungerDecay;
+        this.healthPerFood = healthPerFood;
     }
 
     public void findNearestFood(ArrayList<Grids> grid){
@@ -125,14 +129,14 @@ public class Cell {
     }
 
     public void eat(ArrayList<Grids> grid){
-        this.hunger += 5;
+        this.hunger += healthPerFood;
             if (this.hunger > 100)
                 this.hunger = 100;
         CellSimulator.findFromCoord(grid, this.getX(),this.getY()).removeFood();
     }
 
     public void starve(){
-        this.hunger -= 3;
+        this.hunger -= hungerDecay;
             if (this.hunger < 0){
                 this.hunger = 0;
                 this.alive = false;
