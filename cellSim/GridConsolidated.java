@@ -9,23 +9,21 @@ public class GridConsolidated extends JInternalFrame{
 
 
 
-    static final int cols = 10;
-    static final int rows = 11;
+    static final int RANGE = 10;
 
     static final int originX = 20;
     static final int originY = 40;
     static final int cellSide = 60;
-
-
+    JPanel controlPanel = new JPanel(new GridLayout(RANGE,RANGE));
 
     public GridConsolidated(ArrayList<Grids> gridList) {
 
-        JPanel controlPanel = new JPanel(new GridLayout(10,10));
+
 
         for(Grids item:gridList){
-            JTextArea box = new JTextArea("");
+            JTextArea box = new JTextArea();
             if(item.hasCell){
-                box.setText("Cell");
+                box.setText("Cell  ");
                 box.setBackground(new Color(155, 247, 187));
             }
             else if(item.hasFood){
@@ -44,7 +42,38 @@ public class GridConsolidated extends JInternalFrame{
         this.add(controlPanel);
 
 
-        setSize(500,500);
+        setSize(300,300);
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    public void updateValues(ArrayList<Grids> gridList){
+        controlPanel.removeAll();
+
+
+        for(Grids item:gridList){
+            JTextArea box = new JTextArea();
+            if(item.hasCell){
+                box.setText("Cell  ");
+                box.setBackground(new Color(155, 247, 187));
+            }
+            else if(item.hasFood){
+                box.setText("Food");
+                box.setBackground(new Color(	231, 224, 211));
+            }
+            else{
+                box.setBackground(new Color(	226, 238, 241));
+            }
+            Border border = BorderFactory.createLineBorder(Color.white);
+            box.setBorder(BorderFactory.createCompoundBorder(border,
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+            controlPanel.add(box);
+        }
+
+        this.add(controlPanel);
+
+
+        setSize(300,300);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
