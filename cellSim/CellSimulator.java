@@ -37,12 +37,12 @@ public class CellSimulator {
     public CellSimulator(int hungerDecayVal, double foodGeneration, double lifeGeneration,
                                              int healthFromFood, int initialCellsVal, int initialFoodVal){
 
-        int stepsIterated = 0;
-        int foodGenerated = 0;
-        int deadCells = 0;
-        int livingCells = 0;
-        int foodUnits = 0;
-        double averageHunger = 0;
+        stepsIterated = 0;
+        foodGenerated = 0;
+        deadCells = 0;
+        livingCells = 0;
+        foodUnits = 0;
+        averageHunger = 0;
 
         this.hungerDecayVal = hungerDecayVal;
         this.foodGeneration = foodGeneration;
@@ -66,6 +66,7 @@ public class CellSimulator {
         }
 
         for (int i = 0; i<initialFoodVal; i++){
+            foodGenerated++;
             makeNewFood(this.grid);
         }
 
@@ -159,11 +160,15 @@ public class CellSimulator {
 
 
 
-        return "During runtime:\n----------------------\nSteps iterated through: "
-                + stepsIterated + "\nNumber of food units generated: " + foodGenerated
-                + "\nNumber of cells generated: " + cellsGenerated + "\nNumber of cells that died: " + deadCells
-                + "\nCurrent number of living cells: " + livingCells + "\nCurrent number of food units: " + foodUnits
-                + "\nAverage hunger level of living cells: " + averageHunger;
+        return "Steps iterated through: " + stepsIterated + "\n----------------------"
+                + "\nNumber of cells generated: " + cellsGenerated
+                + "\nCurrent number of living cells: " + livingCells
+                + "\nNumber of cells that died: " + deadCells
+                + "\nAverage hunger level of living cells: " + averageHunger
+
+                +"\n\nNumber of food units generated: " + foodGenerated
+                 + "\nCurrent number of food units: " + foodUnits
+                ;
     }
 
     public static Cell makeNewCell(ArrayList<Grids> grid){
