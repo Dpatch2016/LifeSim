@@ -11,22 +11,22 @@ public class UI extends JPanel {
     // Create panels for the Model and the View
     JPanel editPanel, gridPanel;
     //Variables
-    int hungerDecayVal = 1; // from 1 to 100
+    int hungerDecayVal = 5; // from 1 to 100
     double foodGeneration = 0.5; // from 0 to 1
-    double lifeGeneration = 0.2; // from 0 to 1
-    int healthFromFood = 10; // from 1 to 100
-    int initialCellsVal = 5; // from 0 to 10
+    double lifeGeneration = 0.1; // from 0 to 1
+    int healthFromFood = 3; // from 1 to 100
+    int initialCellsVal = 3; // from 0 to 10
     int initialFoodVal = 3; // form 0 to 10
     boolean playPressed = false;
     boolean getNext = false;
     CellSimulator cellSim = new CellSimulator(hungerDecayVal,foodGeneration,lifeGeneration,healthFromFood,initialCellsVal,initialFoodVal);
     GridConsolidated gridDisplay = new GridConsolidated(cellSim.returnGrids());
     //TextField Variables
-    JTextField hungerDecayInput = new JTextField("1");
+    JTextField hungerDecayInput = new JTextField("5");
     JTextField foodGenInput = new JTextField("0.5");
-    JTextField lifeGenInput = new JTextField("0.2");
-    JTextField foodRegenInput = new JTextField("10");
-    JTextField initialCellsInput = new JTextField("5");
+    JTextField lifeGenInput = new JTextField("0.1");
+    JTextField foodRegenInput = new JTextField("3");
+    JTextField initialCellsInput = new JTextField("3");
     JTextField initialFoodInput = new JTextField("3");
     //Buttons & TextFields
     JButton submitButton = new JButton("Submit");
@@ -116,11 +116,11 @@ public class UI extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 getVariables();
                 if(!inputValidation()){
-                    hungerDecayVal = 1;
+                    hungerDecayVal = 5;
                     foodGeneration = 0.5;
-                    lifeGeneration = 0.5;
-                    healthFromFood = 10;
-                    initialCellsVal = 5;
+                    lifeGeneration = 0.1;
+                    healthFromFood = 3;
+                    initialCellsVal = 3;
                     initialFoodVal = 3;
                     System.out.println("NOT RIGHT VALUES");
                 }
@@ -168,7 +168,7 @@ public class UI extends JPanel {
         initialCells.setOpaque(false);
         initialCells.setEditable(false);
         descriptionList[4] = initialCells;
-        JTextArea initialFood = new JTextArea("initial food (0-10): ");
+        JTextArea initialFood = new JTextArea("initial food (0-20): ");
         initialFood.setOpaque(false);
         initialFood.setEditable(false);
         descriptionList[5] = initialFood;
@@ -313,11 +313,11 @@ public class UI extends JPanel {
             initialCellsVal = Integer.parseInt(initialCellsInput.getText()); // from 0 to 10
             initialFoodVal = Integer.parseInt(initialFoodInput.getText()); // form 0 to 10
         }catch(Exception e){
-            hungerDecayVal = 1;
+            hungerDecayVal = 5;
             foodGeneration = 0.5;
-            lifeGeneration = 0.2;
-            healthFromFood = 10;
-            initialCellsVal = 5;
+            lifeGeneration = 0.1;
+            healthFromFood = 3;
+            initialCellsVal = 3;
             initialFoodVal = 3;
         }
 
@@ -355,7 +355,7 @@ public class UI extends JPanel {
             //from 0 to 10
             return false;
         }
-        else if (!(initialFoodVal >= 0 && initialFoodVal <= 10)){
+        else if (!(initialFoodVal >= 0 && initialFoodVal <= 20)){
 
             //from 0 to 10
             return false;
