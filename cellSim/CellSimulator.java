@@ -12,12 +12,20 @@ public class CellSimulator {
     static double FOODRATE = 0.5;
     static double CELLRATE = 0.05;
 
-    int hungerDecayVal;
+    static int hungerDecayVal;
     double foodGeneration;
     double lifeGeneration;
-    int healthFromFood;
+    static int healthFromFood;
     int initialCellsVal;
     int initialFoodVal;
+
+    int stepsIterated;
+    int foodGenerated;
+    int cellsGenerated;
+    int deadCells;
+    int livingCells;
+    int foodUnits;
+    double averageHunger;
 
 
     ArrayList<Grids> grid;
@@ -28,6 +36,14 @@ public class CellSimulator {
 
     public CellSimulator(int hungerDecayVal, double foodGeneration, double lifeGeneration,
                                              int healthFromFood, int initialCellsVal, int initialFoodVal){
+
+        int stepsIterated = 0;
+        int foodGenerated = 0;
+        int deadCells = 0;
+        int livingCells = 0;
+        int foodUnits = 0;
+        double averageHunger = 0;
+
         this.hungerDecayVal = hungerDecayVal;
         this.foodGeneration = foodGeneration;
         this.lifeGeneration = lifeGeneration;
@@ -45,6 +61,7 @@ public class CellSimulator {
         }
 
         for (int i = 0; i<initialCellsVal; i++){
+            cellsGenerated++;
             cell.add(makeNewCell(this.grid));
         }
 
@@ -69,16 +86,31 @@ public class CellSimulator {
             } else {
                 findFromCoord(this.grid, item.getX(), item.getY()).removeCell();
                 itr.remove();
+                deadCells++;
             }
-
-            if (Math.random() <= this.lifeGeneration) {
-                this.cell.add(makeNewCell(this.grid));
-            }
-            if (Math.random() <= this.foodGeneration) {
-                makeNewFood(this.grid);
-            }
-
         }
+
+        if (Math.random() <= this.lifeGeneration) {
+            if (cell.size() < RANGE) {
+                this.cell.add(makeNewCell(this.grid));
+                cellsGenerated++;
+            }
+        }
+        if (Math.random() <= this.foodGeneration) {
+            int temp = 0;
+            for(Grids item: grid){
+                if (item.hasFood){
+                    temp++;
+                }
+            }
+            if(temp < 2*RANGE) {
+                makeNewFood(this.grid);
+                foodGenerated++;
+            }
+        }
+
+        stepsIterated++;
+
         return this.grid;
     }
 
@@ -102,6 +134,38 @@ public class CellSimulator {
         grid.get(numb).addFood();
     }
 
+    public String getStats(){
+        int temp = 0;
+        for (Cell item:cell){
+            temp += item.hunger;
+        }
+        if (cell.size() != 0) {
+            temp /= cell.size();
+        }
+        else{
+            temp = 0;
+        }
+        averageHunger = temp;
+        livingCells = cell.size();
+
+        temp = 0;
+        for (Grids item2:grid){
+            if (item2.hasFood){
+                temp++;
+            }
+        }
+
+        foodUnits = temp;
+
+
+
+        return "During runtime:\n----------------------\nSteps iterated through: "
+                + stepsIterated + "\nNumber of food units generated: " + foodGenerated
+                + "\nNumber of cells generated: " + cellsGenerated + "\nNumber of cells that died: " + deadCells
+                + "\nCurrent number of living cells: " + livingCells + "\nCurrent number of food units: " + foodUnits
+                + "\nAverage hunger level of living cells: " + averageHunger;
+    }
+
     public static Cell makeNewCell(ArrayList<Grids> grid){
         Random rand = new Random();
         int numb = rand.nextInt(RANGE*RANGE-1);
@@ -109,7 +173,7 @@ public class CellSimulator {
             numb = rand.nextInt(RANGE*RANGE-1);
         }
         grid.get(numb).addCell();
-        return new Cell(grid.get(numb).getX(),grid.get(numb).getY());
+        return new Cell(grid.get(numb).getX(),grid.get(numb).getY(),hungerDecayVal,healthFromFood);
     }
 
     public static void printOut(ArrayList<Grids> grid) {
@@ -130,6 +194,8 @@ public class CellSimulator {
         }
         System.out.println("\n");
     }
+
+
 
     public static void main(String[] args) throws InterruptedException {
         CellSimulator cellSim = new CellSimulator(0,0.5,0.10,0,1, 4);
