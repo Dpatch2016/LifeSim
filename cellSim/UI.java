@@ -269,7 +269,7 @@ public class UI extends JPanel {
                 playPressed = false;
                 getNext = false;
                 String textToDisplay = cellSim.getStats();
-                JOptionPane.showMessageDialog(getParent(),textToDisplay);
+                JOptionPane.showMessageDialog(getParent(),textToDisplay,"Statistics of Current Run",JOptionPane.INFORMATION_MESSAGE);
 
                 System.out.println("DISPLAY PRESSED");
             }
