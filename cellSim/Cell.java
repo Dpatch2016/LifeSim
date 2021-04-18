@@ -7,7 +7,7 @@ import java.util.Random;
 public class Cell {
 
     boolean alive;
-    int hunger;
+    public int hunger;
     int x;
     int y;
     int xFood;
